@@ -1,11 +1,11 @@
 Package: mle.lod
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Maximum Likelihood Estimation for Covariates and Outcomes Subject to a Limit of Detection
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Camille Moore
+Maintainer: Camille Moore <mooreca@njhealth.org>
+Description: Maximum likelihood inference for regression models where either the outcome,
+    a covariate or both are subjec to a limit of detection.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
