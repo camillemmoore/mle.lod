@@ -81,6 +81,7 @@ NNL <- function(param, LOD_x, LOD_y, x, y, censor_x, censor_y, C=NULL, single_LO
 #' @param reltol relative tolerance for stopping optimization.  See optim.
 #' @param ...	 Further arguments to pass to optim.
 #'
+#' @import stats4
 #' @importClassesFrom stats4 mle
 #'
 #' @return an object of class mle
@@ -96,6 +97,7 @@ NNL <- function(param, LOD_x, LOD_y, x, y, censor_x, censor_y, C=NULL, single_LO
 #' @export
 mle2 <- function (minuslogl, start = NULL, method = 'Nelder-Mead',
                   nobs, maxit=1000, reltol=1e-8, ...) {
+
   call <- match.call()
 
   oout <- optim(start, minuslogl, method = method, hessian = TRUE, control = list(maxit = maxit, reltol = reltol))

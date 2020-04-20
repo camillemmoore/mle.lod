@@ -7,6 +7,12 @@ Maintainer: Camille Moore <mooreca@njhealth.org>
 Description: Maximum likelihood inference for regression models where either the outcome,
     a covariate or both are subjec to a limit of detection.
 License: What license is it under?
+Imports:
+    stats4
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
