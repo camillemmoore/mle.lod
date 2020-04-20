@@ -24,7 +24,7 @@ mle_fit(
 \arguments{
 \item{y}{a vector of potentially censored outcome values}
 
-\item{x}{a vecotr of potentially censored covariate values}
+\item{x}{a vector of potentially censored covariate values}
 
 \item{censor_x}{a vector the length of x; 0 if x is observed, 1 if censored}
 
@@ -40,7 +40,7 @@ mle_fit(
 
 \item{start}{a vector of initial values for optimizer in the following order: mu_x, sigma_x, sigma_y, intercept, slope, covariates (in same order supplied in covariates.  If not supplied will default to mu_x = mean(x) if gaussian x, mean(log(x)) if lognormal x, sigma_x = sd(x) if gaussian x, sd(log(x)) if lognormal x, sigma_y = sd(y), intercept = mean(y), slope = 0, covariates = 0}
 
-\item{method}{Optimization method to use. See optim.}
+\item{method}{optimization method to use. See optim.}
 
 \item{maxit}{integer. Maximum number of iterations for each optmization run.}
 
