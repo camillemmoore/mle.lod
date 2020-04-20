@@ -69,11 +69,6 @@ NNL <- function(param, LOD_x, LOD_y, x, y, censor_x, censor_y, C=NULL, single_LO
 }
 
 
-maxit =5000, # maximum number of iterations for each optmization run.
-reltol = 1e-8, # relative tolerance for stopping optimization.  See optim.
-maxoptimit = 10, # maximum number of opitimization iterations
-llabstol = 1e-8 # absolute tolerance (change in log likelihood) for declaring convergence.
-
 # MLE Fitting Function
 #'
 #' Maximum likelihood estimation of model paramters
