@@ -3,7 +3,7 @@
 #' Calculates model parameters when either the covariate, outcome or both are subject to a lower limit of detection.
 #'
 #' @param y a vector of potentially censored outcome values
-#' @param x a vecotr of potentially censored covariate values
+#' @param x a vector of potentially censored covariate values
 #' @param censor_x a vector the length of x; 0 if x is observed, 1 if censored
 #' @param censor_y a vector the length of y; 0 if y is observed, 1 if censored
 #' @param LOD_x a single LOD for the censored covariate or a vector of LODs (specific to each observation)
@@ -11,7 +11,7 @@
 #' @param covariates an optional matrix or dataframe of additional uncensored covariates to include in the model
 #' @param x.dist the distribution for censored predictor - either 'gaussian', 'normal' or 'lognormal'
 #' @param start a vector of initial values for optimizer in the following order: mu_x, sigma_x, sigma_y, intercept, slope, covariates (in same order supplied in covariates.  If not supplied will default to mu_x = mean(x) if gaussian x, mean(log(x)) if lognormal x, sigma_x = sd(x) if gaussian x, sd(log(x)) if lognormal x, sigma_y = sd(y), intercept = mean(y), slope = 0, covariates = 0
-#' @param method Optimization method to use. See optim.
+#' @param method optimization method to use. See optim.
 #' @param maxit integer. Maximum number of iterations for each optmization run.
 #' @param reltol relative tolerance for stopping optimization.  See optim.
 #' @param maxoptimit maximum number of opitimization iterations
