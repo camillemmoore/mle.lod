@@ -1,0 +1,166 @@
+---
+title: "mle.lod Vignette"
+author: "Camille Moore"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mle.lod Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+The mle.lod package fits linear regression models when either or both the outcome or a covariate are subject to a lower limit of detection via maximum likelihood estimation. Currently the mle.lod package is capable of fitting regression models for:
+
+* Normally distributed outcomes subject to a lower limit of detection
+
+* A normally or log-normally distributed covariate subject to a lower limit of detection 
+
+* Single or observation specific lower limits of detections
+
+* Adjusting for additional covariates
+
+## Install mle.lod 
+To install the package, you first need to install the devtools package. You can do this from CRAN. Invoke R and then type:
+
+```{r, eval=F}
+install.packages("devtools")
+```
+
+Next, load the devtools package:
+```{r, eval = F}
+library(devtools)
+```
+
+Install the package.
+
+```{r, eval = F}
+install_github("camillemmoore/mle.lod)
+```
+
+Load the package.
+
+```{r}
+library(mle.lod)
+library(stats4)
+```
+
+## Examples
+
+### Regression using a lognormally distributed covariate subject to a single LOD
+First, we will generate simulated data including a log-normally distributed covariate subject to a LOD of 2 for 100 subjects:
+```{r}
+set.seed(1000)
+x <- exp(rnorm(100, mean=0, sd = 1))
+y <- 10 + 2*x + rnorm(100, mean=0, sd=1)
+plot(x,y)
+x_censored <- ifelse(x < 0.5, 0.5, x)
+```
+
+Now we can fit the regression model.  We use the censor_x argument to identify which x values are below the limit of detection of 0.5.  Since no outcome values are censored, we pass a vector of 0's to the censor_y argument.  Providing a vector of starting values, particularly for log-normally distributed x's, can speed convergence and prevent warnings, errors, and convergence failures. These values can be obtained from simple linear regression models that do not account for limits of detection. Starting values should be named and supplied in the following order: mu_x, sigma_x, sigma_y, intercept, slope, covariates.  
+
+```{r}
+summary(lm.1 <- lm(y ~ x))
+m1.1 <- mle_fit(y = y, x = x_censored, 
+              censor_x = ifelse(x_censored==0.5, 1, 0),
+              censor_y = rep(0, length(y)), 
+              x.dist = 'lognormal',
+              start = c(mu_x = mean(log(x)), 
+                        sigma_x = sd(log(x)), 
+                        sigma_y = sd(lm.1$residuals), 
+                        intercept = lm.1$coefficients[1], 
+                        slope = lm.1$coefficients[2]))
+
+summary(m1.1)
+```
+
+Since the x-values that were below the LOD were replaced with the LOD of 0.5 in the x_censored vector, we did not need to specify the limit of detection.  Alternatively, we could fit the model as follows with the same results:
+```{r}
+m1.2 <- mle_fit(y = y, x = x, 
+              censor_x = ifelse(x < 0.5, 1, 0),
+              LOD_x = 0.5,
+              censor_y = rep(0, length(y)), 
+              x.dist = 'lognormal',
+              start = c(mu_x = mean(log(x)), 
+                        sigma_x = sd(log(x)), 
+                        sigma_y = sd(lm.1$residuals), 
+                        intercept = lm.1$coefficients[1], 
+                        slope = lm.1$coefficients[2]))
+
+summary(m1.2)
+```
+
+### Regression using a normally distributed covariate subject to observation specific LODs
+Now, we will simulate data including a normally distributed covariate subject to observation specific limits of detection for 100 subjects:
+```{r}
+x <- rnorm(100, mean=5, sd = 1)
+y <- 10 + 2*x + rnorm(100, mean=0, sd=0.5)
+plot(x,y)
+LOD_x <- sample(c(3,4), size = 100, replace=T)
+censor_x <- ifelse(x < LOD_x, 1, 0)
+```
+
+Now we can fit the regression model.  Instead of supplying a single limit of detection, we supply a vector that specifies the limitt of detection for each observation:
+
+```{r}
+m2.1 <- mle_fit(y = y, x = x, 
+              LOD_x = LOD_x,
+              censor_x = censor_x,
+              censor_y = rep(0, length(y)), 
+              x.dist = 'normal')
+
+summary(m2.1)
+```
+### Regression when both the outcome and covariate are subject to LODs
+Now, we will add cenosring of the y variable at a lower limit of detection of 18 to the above example:
+```{r}
+censor_y <- ifelse(y < 18, 1, 0)
+
+m2.2 <- mle_fit(y = y, x = x, 
+              LOD_x = LOD_x,
+              LOD_y = 18,
+              censor_x = censor_x,
+              censor_y = censor_y, 
+              x.dist = 'normal')
+
+summary(m2.2)
+```
+Providing better starting values, which could be estimated from a linear regression that does not account for censoring, will reduce warning messages and speed computation:
+
+```{r}
+
+summary(lm.2 <- lm(y~x))
+m2.3 <- mle_fit(y = y, x = x, 
+              LOD_x = LOD_x,
+              LOD_y = 18,
+              censor_x = censor_x,
+              censor_y = censor_y, 
+              x.dist = 'normal',
+              start = c( mu_x = mean(x), 
+                         sigma_x = sd(x), 
+                         sigma_y = sd(lm.2$residuals), 
+                         intercept = lm.2$coefficients[1], 
+                         slope = lm.2$coefficients[2]))
+
+summary(m2.3)
+```
+
+### Adjusting for Covariates
+Now, we will add covariates to the model:
+```{r}
+
+C <- data.frame(age = runif(100, 30, 50), gender = rbinom(size = 1, n=100, prob=0.5))
+y <- 10 + 2*x + C$age*0.5 + C$gender*3 + rnorm(100, mean=0, sd=0.5)
+
+m2.4 <- mle_fit(y = y, x = x, 
+              LOD_x = LOD_x,
+              censor_x = censor_x,
+              censor_y = rep(0, length(y)), 
+              covariates = C)
+
+summary(m2.4)
+```

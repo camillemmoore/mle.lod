@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Camille Moore" />
+
+
+<title>mle.lod Vignette</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">mle.lod Vignette</h1>
+<h4 class="author">Camille Moore</h4>
+
+
+
+<p>The mle.lod package fits linear regression models when either or both the outcome or a covariate are subject to a lower limit of detection via maximum likelihood estimation. Currently the mle.lod package is capable of fitting regression models for:</p>
+<ul>
+<li><p>Normally distributed outcomes subject to a lower limit of detection</p></li>
+<li><p>A normally or log-normally distributed covariate subject to a lower limit of detection</p></li>
+<li><p>Single or observation specific lower limits of detections</p></li>
+<li><p>Adjusting for additional covariates</p></li>
+</ul>
+<div id="install-mle.lod" class="section level2">
+<h2>Install mle.lod</h2>
+<p>To install the package, you first need to install the devtools package. You can do this from CRAN. Invoke R and then type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</code></pre></div>
+<p>Next, load the devtools package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)</code></pre></div>
+<p>Install the package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install_github</span>(<span class="st">&quot;camillemmoore/mle.lod)</span></code></pre></div>
+<p>Load the package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mle.lod)
+<span class="kw">library</span>(stats4)</code></pre></div>
+</div>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<div id="regression-using-a-lognormally-distributed-covariate-subject-to-a-single-lod" class="section level3">
+<h3>Regression using a lognormally distributed covariate subject to a single LOD</h3>
+<p>First, we will generate simulated data including a log-normally distributed covariate subject to a LOD of 2 for 100 subjects:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1000</span>)
+x &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>))
+y &lt;-<span class="st"> </span><span class="dv">10</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)
+<span class="kw">plot</span>(x,y)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x_censored &lt;-<span class="st"> </span><span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="fl">0.5</span>, x)</code></pre></div>
+<p>Now we can fit the regression model. We use the censor_x argument to identify which x values are below the limit of detection of 0.5. Since no outcome values are censored, we pass a vector of 0’s to the censor_y argument. Providing a vector of starting values, particularly for log-normally distributed x’s, can speed convergence and prevent warnings, errors, and convergence failures. These values can be obtained from simple linear regression models that do not account for limits of detection. Starting values should be named and supplied in the following order: mu_x, sigma_x, sigma_y, intercept, slope, covariates.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(lm.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x))
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = y ~ x)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; -2.32502 -0.61872  0.06063  0.64997  1.91119 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept) 10.11543    0.11375   88.93   &lt;2e-16 ***</span>
+<span class="co">#&gt; x            1.99126    0.03993   49.87   &lt;2e-16 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 0.9078 on 98 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.9621, Adjusted R-squared:  0.9617 </span>
+<span class="co">#&gt; F-statistic:  2487 on 1 and 98 DF,  p-value: &lt; 2.2e-16</span>
+m1.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">mle_fit</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> x_censored, 
+              <span class="dt">censor_x =</span> <span class="kw">ifelse</span>(x_censored<span class="op">==</span><span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>),
+              <span class="dt">censor_y =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(y)), 
+              <span class="dt">x.dist =</span> <span class="st">'lognormal'</span>,
+              <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">mu_x =</span> <span class="kw">mean</span>(<span class="kw">log</span>(x)), 
+                        <span class="dt">sigma_x =</span> <span class="kw">sd</span>(<span class="kw">log</span>(x)), 
+                        <span class="dt">sigma_y =</span> <span class="kw">sd</span>(lm.<span class="dv">1</span><span class="op">$</span>residuals), 
+                        <span class="dt">intercept =</span> lm.<span class="dv">1</span><span class="op">$</span>coefficients[<span class="dv">1</span>], 
+                        <span class="dt">slope =</span> lm.<span class="dv">1</span><span class="op">$</span>coefficients[<span class="dv">2</span>]))
+<span class="co">#&gt; No LOD for Y provided.  Assuming LOD is provided in y vector for censored values.</span>
+<span class="co">#&gt; No LOD for X provided.  Assuming LOD is provided in x vector for censored values.</span>
+
+<span class="kw">summary</span>(m1.<span class="dv">1</span>)
+<span class="co">#&gt; Maximum likelihood estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mle2(minuslogl = function(param) {</span>
+<span class="co">#&gt;     NNL(param, LOD_x = LOD_x, LOD_y = LOD_y, x = x, y = y, censor_x = censor_x, </span>
+<span class="co">#&gt;         censor_y = censor_y, C = covariates, x.dist = x.dist)</span>
+<span class="co">#&gt; }, start = coef(temp1), method = method, maxit = maxit, reltol = reltol)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                          Estimate Std. Error</span>
+<span class="co">#&gt; mu_x                   0.07370162 0.09337585</span>
+<span class="co">#&gt; sigma_x                0.91816768 0.06998744</span>
+<span class="co">#&gt; sigma_y                0.89539206 0.06402038</span>
+<span class="co">#&gt; intercept.(Intercept) 10.06853377 0.11370284</span>
+<span class="co">#&gt; slope.x                2.00023444 0.03965752</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -2 log L: 578.6574</span></code></pre></div>
+<p>Since the x-values that were below the LOD were replaced with the LOD of 0.5 in the x_censored vector, we did not need to specify the limit of detection. Alternatively, we could fit the model as follows with the same results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">mle_fit</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> x, 
+              <span class="dt">censor_x =</span> <span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">0</span>),
+              <span class="dt">LOD_x =</span> <span class="fl">0.5</span>,
+              <span class="dt">censor_y =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(y)), 
+              <span class="dt">x.dist =</span> <span class="st">'lognormal'</span>,
+              <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">mu_x =</span> <span class="kw">mean</span>(<span class="kw">log</span>(x)), 
+                        <span class="dt">sigma_x =</span> <span class="kw">sd</span>(<span class="kw">log</span>(x)), 
+                        <span class="dt">sigma_y =</span> <span class="kw">sd</span>(lm.<span class="dv">1</span><span class="op">$</span>residuals), 
+                        <span class="dt">intercept =</span> lm.<span class="dv">1</span><span class="op">$</span>coefficients[<span class="dv">1</span>], 
+                        <span class="dt">slope =</span> lm.<span class="dv">1</span><span class="op">$</span>coefficients[<span class="dv">2</span>]))
+<span class="co">#&gt; No LOD for Y provided.  Assuming LOD is provided in y vector for censored values.</span>
+<span class="co">#&gt; Single LOD for X provided.  Assuming all observations have the same limit of detection.</span>
+
+<span class="kw">summary</span>(m1.<span class="dv">2</span>)
+<span class="co">#&gt; Maximum likelihood estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mle2(minuslogl = function(param) {</span>
+<span class="co">#&gt;     NNL(param, LOD_x = LOD_x, LOD_y = LOD_y, x = x, y = y, censor_x = censor_x, </span>
+<span class="co">#&gt;         censor_y = censor_y, C = covariates, x.dist = x.dist)</span>
+<span class="co">#&gt; }, start = coef(temp1), method = method, maxit = maxit, reltol = reltol)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                          Estimate Std. Error</span>
+<span class="co">#&gt; mu_x                   0.07370162 0.09337585</span>
+<span class="co">#&gt; sigma_x                0.91816768 0.06998744</span>
+<span class="co">#&gt; sigma_y                0.89539206 0.06402038</span>
+<span class="co">#&gt; intercept.(Intercept) 10.06853377 0.11370284</span>
+<span class="co">#&gt; slope.x                2.00023444 0.03965752</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -2 log L: 578.6574</span></code></pre></div>
+</div>
+<div id="regression-using-a-normally-distributed-covariate-subject-to-observation-specific-lods" class="section level3">
+<h3>Regression using a normally distributed covariate subject to observation specific LODs</h3>
+<p>Now, we will simulate data including a normally distributed covariate subject to observation specific limits of detection for 100 subjects:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
+y &lt;-<span class="st"> </span><span class="dv">10</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="fl">0.5</span>)
+<span class="kw">plot</span>(x,y)</code></pre></div>
+<p><img src="data:image/png;base64,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YiEgBMSA9A4IASGQGwJiQLlBr4mFgBAQA9I7IASEQG4IiAHlBr0mFgJCQAxI74AQEAK5ISAGlBv0mlgICAExIL0DQkAI5IaAGFBu0GtiISAExID0DggBIZAbAmJAuUGviYWAEBAD0jsgBIRAbgiIAeUGvSYWAkJADEjvgBAQArkhIAaUG/SaWAgIATEgvQNCQAjkhoAYUG7Qa2IhIATmEQQ9Q+DMM88M48aNC4sttljPBtBZQqCXCMQYw//+97/A51xzzeVL9ZALLLBAuOaaa8IiiyxSvblQ3wfYxcdCXVFJLubzn/98OP7448WASvK82u0y33jjjXDooYeGWbNmhY9//OPh/vvv989LLrkkzD333H67m266afjrX/8aPve5zxX29iUB9fDRzDPPPGHRRRcNG264YQ9H0GlCoGcIvP322+EjH/lIGDlyZLjooot8kA8++CDMP//84Ygjjgh/+tOfAu/npz/96Z5N0IdnyQbUh2BrKiGQBQK//OUvw/rrr19hPoyJ1DN79mxfbrjhhiym6ZMxxID6BGZNIgS6RgDmcfDBB4eVVlopLLTQQmHNNdcMEydObHjSXXfd5cc22jl8+PDA/rJQW6lgb731Vnj11VfDJz7xibLgr+sUAm5I/uxnP+vG5FtuuSWssMIK4S9/+UvYYostwj//+c9w0EEH1aC08MILh//85z8129IK25dYYom0WvjPtmJAf/jDH8KoUaPcMFd45HWBQuBDBM4666wwffr08N///reCyeabbx5efvllt+Nss802YbXVVgt/+9vf3PN67733hssuuywstdRSYcSIEZVzXn/99XDyyScH9peFSseAfv7zn/vDagTwE088EZCCvv/97/vuddZZJ+y9996NDtU2IVAYBP785z83VLeWXHLJsNNOOwX2v/POO2HttdcOY8aMCaeeemo47LDDwpe//OWw8847hxNPPDHMnDkzDBs2LPzkJz8J6667bmHurbsLKR0Duu+++wKuxo9+9KPudqy+QX4B3n///TBlyhTfjFdAJASKjgBqE16tRoQ9CDUM5nPttdeG7bbbztWv5ZZbLjz55JNh0qRJvnzsYx8L5557bthnn30aDVPYbaUzQl988cXhhBNOcEaz5557hgcffDA8/PDDvrB98cUXr6yfcsophQVeFyYEEgJf+MIXnImk9fRJkOEZZ5wRcLF/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HXaYd6HI65ruvfdeT2qm0Waj5amnnsrr0no9b2m7YvT6zls0wF577RXeeeedcO6554Z3333XO6RuvfXWwdo0t2jGORuWZopnn312WGqppebsxBYcba2tw9tvv+09rqqHX3nllatX+/Q7VQw22GAD//GYNGlSoDcYbXlefPFF717bpxfz4WQ8q1133bXD1Oeff75nxBctW7/DhXa1oTe9p3VuLQKTJ0/2Hu/33HNPZcfEiRN925NPPlnZltcXk8Si/aJH66UW7aXN6zIq826++ebRGuxV1ovwZfz48dFKlcQZM2ZULue6666L1rcsmmRU2Zb3F941a4oZ7Yct70vp1fxSwbriznO4b8sttwzPPfdcWG+99SpnUlMGmnfeeSvb8vpCG+s11lgj7LzzznldQs28Dz30UFh77bV9G91Ri0AXXXSRN5SkUWKibbfdNhhDKoTayjW99dZbYZ999gn7779/2HDDDdNllvJTDCjDx0YXTZMwfMTXXnstXHLJJeGkk04KI0aMqGzPcLo5GurGG28MqBTnnHPOHJ3XqoOxs7z88sveknmzzTbzfvXrrLNOmDp1aqumbGpcGM2aa64ZLr300rDNNtuE9ddfP4wdOzbMnj27qfP74iBUQt6v4447ri+ma+0cvZKfdHKnCKy77rqueiHOW2XETo/rix2vv/56XGGFFeJ5553n0x177LG5q2A33HCD47PWWmtFY4rR/sn9GlErHnzwwb6ApcMcJoXF+eabLxpDjNZ3PVob6zh06FC/zt12263D8XlsMPtiXGyxxeK+++6bx/SZzxkyH1EDOgKPPvpovOmmm+Lw4cPj4osvHu+6667ckMHOssUWW1TmLwIDgiljb7Ff8sp1YWOxMqNxxx13rGzryy9mEHdmY5JsfPrppytTW494327eqMq2vL4km2IRriULDMSAskCxizEw/C600ELRXN9dHNW6XRgr+YeaMGFCNA+YLzAkmCLr1cbW1l1F8yMPGzYsrrLKKs2fkPGRiyyySNxkk01qRn388cedAY0bN65mex4r/KANHjw4j6lbMqfc8BlquMRjYITeaqutKqPaC+12hLvvvruyrS+/TJs2jR+ZsPfee3eYdtNNN3UbFXEufU3YWl544YUORtQFFlggV4P98ssv7zFc1XgQz0UBeGx8edKsWbOCSdXhtNNOy/MyMp1bRugM4UyGy+rAMIyFxACtuuqqGc7U/FD77befd+egQ0daRo0aFZZccklfN1tC84NleKRJZGGjjTZyI3Qa1mxV4ZZbbqnxIqZ9ffVpqmq4/fbbw3vvvVeZ8vrrrw946YgPypMefvjh8MEHH+R+HZli0BK5qp8O+swzz8SFF144WuBhtJclEg+0/fbbe7zG/fffXxhUimADeuKJJ9zQa6EL0aS0aOEKcY899ojzzz9/tLYzuWGF7QdDONcyc+bMaMwnWrR2HDJkSDRPWG7XxcSogPbPH1Hr24VkA8r4SWJzWWmllfxF4WWxlIx47bXXZjxL74YrAgPiDsAFfMCJBduPRUf37uYyOHvKlCkesMk1wYxMVY2m/mQwcu+GOPDAAz0gsnejFOts9QWztyxrskfsgWtzzz13MPd31sO31XhgRbNEc38XJtAvAfz8888HbHiLLrpo2qTPjBEQA8oYUA0nBIRA8wjICN08VjpSCAiBjBEQA8oYUA0nBIRA8wiIATWPlY4UAkIgYwTEgDIGVMMJASHQPAJiQM1jpSOFgBDIGAExoIwB1XBCQAg0j4AYUPNY6UghIAQyRkAMKGNANZwQEALNIyAG1DxWOlIICIGMERADyhhQDScEhEDzCIgBNY+VjhQCQiBjBMSAMgZUwwkBIdA8AmJAzWOlI4WAEMgYATGgjAHVcEJACDSPgBhQ81jpSCEgBDJGQAwoY0A1nBAQAs0jIAbUPFY6UggIgYwREAPKGFANJwSEQPMIiAE1j5WOFAJCIGMExIAyBlTDCQEh0DwCYkDNY6UjhYAQyBgBMaCMAdVwQkAINI+AGFDzWOlIISAEMkZADChjQDWcEBACzSMgBtQ8VjpSCAiBjBEQA8oYUA0nBIRA8wiIATWPlY4UAkIgYwTEgDIGVMMJASHQPAJiQM1jpSMzRuDKK68M6623Xpg8eXJl5DvuuMO3XXXVVZVt+tK+CAyIRu17e7qzIiPwwQcfhI022ijMmjUrPPLII4FXcfDgwWGZZZYJt956a5hrLv0+Fvn5ZXFt82QxiMYQAj1BYO655w4XXHBBWGeddcKJJ54Y3nrrrfDiiy+GG264QcynJ4CW8BwxoBI+tHa65EGDBoWjjz46jB07Nrz//vvhnHPOCSuvvHI73aLupQsEpIJ1AY529Q0Cb775Zlh66aXD/PPP7xLQggsu2DcTa5bcEZCSnfsj0AWMGTMmLLDAAg7EUUcdJUD6EQKSgPrRwy7ireL1GjJkSBg3blyYPXt2OOCAA8LUqVPdOF3E69U1ZYuAGFC2eGq0OUDgnXfeca8X6tdtt93mXrCNN944vPrqq2HatGlBqtgcgFnSQ6WClfTBtcNljx49OkyfPj2MHz8+DBgwwD1ffH/22WcD+0Ttj4AkoPZ/xrpDIVBYBCQBFfbR6MKEQPsjIAbU/s9YdygECouAGFBhH40uTAi0PwJiQO3/jHWHQqCwCIgBFfbR6MKEQPsjIAbU/s9YdygECouAGFBhH40uTAi0PwJiQO3/jHWHQqCwCIgBFfbR6MKEQPsjIAbU/s9YdygECouAGFBhH40uTAi0PwJiQO3/jHWHQqCwCIgBFfbR6MKEQPsjIAbU/s9YdygECouAGFBhH40uTAi0PwJiQO3/jHWHQqCwCIgBFfbR6MKEQPsjIAbU/s9YdygECouAGFBhH40uTAi0PwJiQO3/jHWHQqCwCIgBFfbR6MKEQPsjIAbU/s9YdygECouAGFBhH40uTAi0PwL/BxKI9NNmix97AAAAAElFTkSuQmCC" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">LOD_x &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">4</span>), <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace=</span>T)
+censor_x &lt;-<span class="st"> </span><span class="kw">ifelse</span>(x <span class="op">&lt;</span><span class="st"> </span>LOD_x, <span class="dv">1</span>, <span class="dv">0</span>)</code></pre></div>
+<p>Now we can fit the regression model. Instead of supplying a single limit of detection, we supply a vector that specifies the limitt of detection for each observation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m2.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">mle_fit</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> x, 
+              <span class="dt">LOD_x =</span> LOD_x,
+              <span class="dt">censor_x =</span> censor_x,
+              <span class="dt">censor_y =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(y)), 
+              <span class="dt">x.dist =</span> <span class="st">'normal'</span>)
+<span class="co">#&gt; No LOD for Y provided.  Assuming LOD is provided in y vector for censored values.</span>
+
+<span class="kw">summary</span>(m2.<span class="dv">1</span>)
+<span class="co">#&gt; Maximum likelihood estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mle2(minuslogl = function(param) {</span>
+<span class="co">#&gt;     NNL(param, LOD_x = LOD_x, LOD_y = LOD_y, x = x, y = y, censor_x = censor_x, </span>
+<span class="co">#&gt;         censor_y = censor_y, C = covariates, x.dist = x.dist)</span>
+<span class="co">#&gt; }, start = coef(temp1), method = method, maxit = maxit, reltol = reltol)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;             Estimate Std. Error</span>
+<span class="co">#&gt; mu_x       4.9397930 0.09740793</span>
+<span class="co">#&gt; sigma_x    0.9722498 0.06945859</span>
+<span class="co">#&gt; sigma_y    0.4915824 0.03562578</span>
+<span class="co">#&gt; intercept 10.0669719 0.27778098</span>
+<span class="co">#&gt; slope      1.9889818 0.05443312</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -2 log L: 69.20613</span></code></pre></div>
+</div>
+<div id="regression-when-both-the-outcome-and-covariate-are-subject-to-lods" class="section level3">
+<h3>Regression when both the outcome and covariate are subject to LODs</h3>
+<p>Now, we will add cenosring of the y variable at a lower limit of detection of 18 to the above example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">censor_y &lt;-<span class="st"> </span><span class="kw">ifelse</span>(y <span class="op">&lt;</span><span class="st"> </span><span class="dv">18</span>, <span class="dv">1</span>, <span class="dv">0</span>)
+
+m2.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">mle_fit</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> x, 
+              <span class="dt">LOD_x =</span> LOD_x,
+              <span class="dt">LOD_y =</span> <span class="dv">18</span>,
+              <span class="dt">censor_x =</span> censor_x,
+              <span class="dt">censor_y =</span> censor_y, 
+              <span class="dt">x.dist =</span> <span class="st">'normal'</span>)
+<span class="co">#&gt; Single LOD for Y provided.  Assuming all observations have the same limit of detection.</span>
+<span class="co">#&gt; Warning in dnorm(X, mean = mux, sd = sigmax, log = T): NaNs produced</span>
+<span class="co">#&gt; Warning in pnorm(LOD_Y, mean = mu_y, sd = sig, log = T): NaNs produced</span>
+
+<span class="co">#&gt; Warning in pnorm(LOD_Y, mean = mu_y, sd = sig, log = T): NaNs produced</span>
+
+<span class="co">#&gt; Warning in pnorm(LOD_Y, mean = mu_y, sd = sig, log = T): NaNs produced</span>
+
+<span class="co">#&gt; Warning in pnorm(LOD_Y, mean = mu_y, sd = sig, log = T): NaNs produced</span>
+
+<span class="kw">summary</span>(m2.<span class="dv">2</span>)
+<span class="co">#&gt; Maximum likelihood estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mle2(minuslogl = function(param) {</span>
+<span class="co">#&gt;     NNL(param, LOD_x = LOD_x, LOD_y = LOD_y, x = x, y = y, censor_x = censor_x, </span>
+<span class="co">#&gt;         censor_y = censor_y, C = covariates, x.dist = x.dist)</span>
+<span class="co">#&gt; }, start = coef(temp1), method = method, maxit = maxit, reltol = reltol)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;             Estimate Std. Error</span>
+<span class="co">#&gt; mu_x       4.9330070 0.09677587</span>
+<span class="co">#&gt; sigma_x    0.9873873 0.07258139</span>
+<span class="co">#&gt; sigma_y    0.4957893 0.03740346</span>
+<span class="co">#&gt; intercept 10.2166563 0.24212606</span>
+<span class="co">#&gt; slope      1.9624751 0.04673625</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -2 log L: 78.86466</span></code></pre></div>
+<p>Providing better starting values, which could be estimated from a linear regression that does not account for censoring, will reduce warning messages and speed computation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span class="kw">summary</span>(lm.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(y<span class="op">~</span>x))
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = y ~ x)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;      Min       1Q   Median       3Q      Max </span>
+<span class="co">#&gt; -1.33985 -0.35799 -0.05208  0.37091  1.04900 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept) 10.02141    0.25896   38.70   &lt;2e-16 ***</span>
+<span class="co">#&gt; x            1.99768    0.05143   38.84   &lt;2e-16 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 0.4978 on 98 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.939,  Adjusted R-squared:  0.9384 </span>
+<span class="co">#&gt; F-statistic:  1509 on 1 and 98 DF,  p-value: &lt; 2.2e-16</span>
+m2.<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">mle_fit</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> x, 
+              <span class="dt">LOD_x =</span> LOD_x,
+              <span class="dt">LOD_y =</span> <span class="dv">18</span>,
+              <span class="dt">censor_x =</span> censor_x,
+              <span class="dt">censor_y =</span> censor_y, 
+              <span class="dt">x.dist =</span> <span class="st">'normal'</span>,
+              <span class="dt">start =</span> <span class="kw">c</span>( <span class="dt">mu_x =</span> <span class="kw">mean</span>(x), 
+                         <span class="dt">sigma_x =</span> <span class="kw">sd</span>(x), 
+                         <span class="dt">sigma_y =</span> <span class="kw">sd</span>(lm.<span class="dv">2</span><span class="op">$</span>residuals), 
+                         <span class="dt">intercept =</span> lm.<span class="dv">2</span><span class="op">$</span>coefficients[<span class="dv">1</span>], 
+                         <span class="dt">slope =</span> lm.<span class="dv">2</span><span class="op">$</span>coefficients[<span class="dv">2</span>]))
+<span class="co">#&gt; Single LOD for Y provided.  Assuming all observations have the same limit of detection.</span>
+<span class="co">#&gt; Warning in pnorm(LOD_Y, mean = mu_y, sd = sig, log = T): NaNs produced</span>
+
+<span class="co">#&gt; Warning in pnorm(LOD_Y, mean = mu_y, sd = sig, log = T): NaNs produced</span>
+
+<span class="co">#&gt; Warning in pnorm(LOD_Y, mean = mu_y, sd = sig, log = T): NaNs produced</span>
+
+<span class="kw">summary</span>(m2.<span class="dv">3</span>)
+<span class="co">#&gt; Maximum likelihood estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mle2(minuslogl = function(param) {</span>
+<span class="co">#&gt;     NNL(param, LOD_x = LOD_x, LOD_y = LOD_y, x = x, y = y, censor_x = censor_x, </span>
+<span class="co">#&gt;         censor_y = censor_y, C = covariates, x.dist = x.dist)</span>
+<span class="co">#&gt; }, start = coef(temp1), method = method, maxit = maxit, reltol = reltol)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                         Estimate Std. Error</span>
+<span class="co">#&gt; mu_x                   4.9330064 0.09677543</span>
+<span class="co">#&gt; sigma_x                0.9873789 0.07258009</span>
+<span class="co">#&gt; sigma_y                0.4957685 0.03740282</span>
+<span class="co">#&gt; intercept.(Intercept) 10.2167468 0.24213488</span>
+<span class="co">#&gt; slope.x                1.9624587 0.04674101</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -2 log L: 78.86466</span></code></pre></div>
+</div>
+<div id="adjusting-for-covariates" class="section level3">
+<h3>Adjusting for Covariates</h3>
+<p>Now, we will add covariates to the model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+C &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">age =</span> <span class="kw">runif</span>(<span class="dv">100</span>, <span class="dv">30</span>, <span class="dv">50</span>), <span class="dt">gender =</span> <span class="kw">rbinom</span>(<span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">n=</span><span class="dv">100</span>, <span class="dt">prob=</span><span class="fl">0.5</span>))
+y &lt;-<span class="st"> </span><span class="dv">10</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>x <span class="op">+</span><span class="st"> </span>C<span class="op">$</span>age<span class="op">*</span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span>C<span class="op">$</span>gender<span class="op">*</span><span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="fl">0.5</span>)
+
+m2.<span class="dv">4</span> &lt;-<span class="st"> </span><span class="kw">mle_fit</span>(<span class="dt">y =</span> y, <span class="dt">x =</span> x, 
+              <span class="dt">LOD_x =</span> LOD_x,
+              <span class="dt">censor_x =</span> censor_x,
+              <span class="dt">censor_y =</span> <span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(y)), 
+              <span class="dt">covariates =</span> C)
+<span class="co">#&gt; No LOD for Y provided.  Assuming LOD is provided in y vector for censored values.</span>
+
+<span class="kw">summary</span>(m2.<span class="dv">4</span>)
+<span class="co">#&gt; Maximum likelihood estimation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; mle2(minuslogl = function(param) {</span>
+<span class="co">#&gt;     NNL(param, LOD_x = LOD_x, LOD_y = LOD_y, x = x, y = y, censor_x = censor_x, </span>
+<span class="co">#&gt;         censor_y = censor_y, C = covariates, x.dist = x.dist)</span>
+<span class="co">#&gt; }, start = coef(temp1), method = method, maxit = maxit, reltol = reltol)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;            Estimate  Std. Error</span>
+<span class="co">#&gt; mu_x      4.9436249 0.096756942</span>
+<span class="co">#&gt; sigma_x   0.9657834 0.068943138</span>
+<span class="co">#&gt; sigma_y   0.4920790 0.035526004</span>
+<span class="co">#&gt; intercept 9.7436455 0.488116109</span>
+<span class="co">#&gt; slope     2.0793405 0.055253944</span>
+<span class="co">#&gt; age       0.4970171 0.009431915</span>
+<span class="co">#&gt; gender    2.9141349 0.101472486</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -2 log L: 67.78333</span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
